@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 // ★ 先ほど直していただいた正しいパス（環境に合わせて調整してください）
-import { supabase } from '@/lib/supabase';
+import { supabase } from '../lib/supabase';
 
 export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;

@@ -42,9 +42,13 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
             <p className="text-sm text-gray-600 leading-relaxed">{product.detail_th}</p>
           </div>
 
-          <button className="w-full bg-[#00B900] text-white py-4 rounded-xl text-lg font-bold shadow-lg hover:bg-green-600 transition-colors">
+          {/* 変更前（<button>...）を消して、以下に差し替えます */}
+          <Link 
+            href={`/checkout/${product.id}`}
+            className="w-full block text-center bg-[#00B900] text-white py-4 rounded-xl text-lg font-bold shadow-lg hover:bg-green-600 transition-colors"
+          >
             สั่งซื้อและชำระเงิน (購入・決済へ進む)
-          </button>
+          </Link>
         </div>
 
       </div>

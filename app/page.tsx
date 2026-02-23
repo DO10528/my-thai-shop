@@ -2,37 +2,21 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-
-// ※あとでここもデータベースと連携させますが、一旦は仮データに戻しておきます
-const mockProducts = [
-  {
-    id: 1,
-    name_th: "นมผง Meiji Step (800g)",
-    price_thb: 650,
-    image_url: "https://placehold.co/400x400/ffe4e6/ff80b5?text=Meiji+Step",
-    detail_th: "นมผงเมจิสเตป สูตรยอดนิยมจากประเทศญี่ปุ่น อุดมไปด้วย DHA และสารอาหารที่จำเป็นต่อการเจริญเติบโตของสมองและร่างกาย เหมาะสำหรับเด็กวัย 1-3 ปี สินค้าเป็นของแท้ นำเข้าโดยตรงจากญี่ปุ่น มั่นใจได้ในคุณภาพและความปลอดภัย 100%"
-  },
-  {
-    id: 2,
-    name_th: "ผ้าอ้อม Merries (ไซส์ M / 64 ชิ้น)",
-    price_thb: 580,
-    image_url: "https://placehold.co/400x400/e0f2fe/38bdf8?text=Merries",
-    detail_th: "เมอร์รี่ส์ ผ้าอ้อมแบบเทป ที่สุดแห่งความนุ่มสบาย ไม่ระคายเคืองผิวบอบบางของลูกน้อย ซึมซับเยี่ยม แห้งสบายตลอดคืน"
-  },
-  {
-    id: 3,
-    name_th: "ขวดนม Pigeon สีชา (240ml)",
-    price_thb: 420,
-    image_url: "https://placehold.co/400x400/fef3c7/fbbf24?text=Pigeon",
-    detail_th: "พีเจ้น ขวดนมคอกว้างสีชา ผลิตจากวัสดุ PPSU ทนความร้อนได้ถึง 180°C มาพร้อมจุกนมเสมือนการให้นมมารดา"
-  }
-];
+// ★ 先ほど直していただいた正しいパス（環境に合わせて調整してください）
+import { supabase } from '@/lib/supabase';
 
 export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
-  const product = mockProducts.find((p) => p.id.toString() === resolvedParams.id);
 
-  if (!product) {
+  // ★ Supabaseから、URLのIDと一致する商品を「1件だけ（.single()）」取得する
+  const { data: product, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('id', resolvedParams.id)
+    .single();
+
+  // 万が一商品が見つからなかったりエラーになった場合は404ページへ
+  if (error || !product) {
     notFound();
   }
 
